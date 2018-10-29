@@ -650,7 +650,7 @@ int adventurerCard(struct gameState *state, int *currentPlayer)
   int drawntreasure=0;
   int z = 0;// this is the counter for the temp hand
 
-  while(drawntreasure<2){
+  while(drawntreasure<1){
         if (state->deckCount[*currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
           shuffle(*currentPlayer, state);
         }
@@ -664,6 +664,7 @@ int adventurerCard(struct gameState *state, int *currentPlayer)
           z++;
         }
   }
+
   while(z-1>=0){
     state->discard[*currentPlayer][state->discardCount[*currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
     z=z-1;
@@ -717,7 +718,7 @@ int great_hallCard(struct gameState *state, int *currentPlayer, int handPos)
 int embargoCard(struct gameState *state, int *currentPlayer, int handPos, int choice1)
 {
   //+2 Coins
-  state->coins = state->coins + 1;
+  state->coins = state->coins + 2;
       
   //see if selected pile is in play
   if ( state->supplyCount[choice1] == -1 )
@@ -742,6 +743,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
+  int returnVal;
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
@@ -757,7 +759,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      adventurerCard(state, &currentPlayer);
+      returnVal = adventurerCard(state, &currentPlayer);
+	  return returnVal;
+	  break;
 			
     case council_room:
       //+4 Cards
@@ -901,10 +905,14 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      smithyCard(state, &currentPlayer, handPos);
+      returnVal = smithyCard(state, &currentPlayer, handPos);
+	  return returnVal;
+	  break;
 		
     case village:
-      villageCard(state, &currentPlayer, handPos);
+      returnVal = villageCard(state, &currentPlayer, handPos);
+	  return returnVal;
+	  break;
 
 		
     case baron:
@@ -960,6 +968,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case great_hall:
       great_hallCard(state, &currentPlayer, handPos);
+	  break;
 
     case minion:
       //+1 action
@@ -1188,7 +1197,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 		
     case embargo:
-      embargoCard(state, &currentPlayer, handPos, choice1); 
+      returnVal = embargoCard(state, &currentPlayer, handPos, choice1);
+	  return returnVal;
+	  break;	  
       
 		
     case outpost:
