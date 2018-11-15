@@ -58,8 +58,21 @@ unittestresults: myAssert.h myAssert.c unittest1.c dominion.o rngs.o
 	gcc -o cardtest4 cardtest4.c myAssert.c -g dominion.o rngs.o $(CFLAGS)
 	@echo CARD TEST 4 >> unittestresults.out
 	./cardtest4 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
+	
+randomTesting: myAssert.h myAssert.c randomtestadventurer.c dominion.o rngs.o
+	gcc -o randomtestadventurer randomtestadventurer.c myAssert.c -g dominion.o rngs.o $(CFLAGS)
+	@echo adventurer > randomtestresults.out
+	./randomtestadventurer >> randomtestresults.out
+	gcc -o randomtestcard1 randomtestcard1.c myAssert.c -g dominion.o rngs.o $(CFLAGS)
+	@echo randomtestcard1 >> randomtestresults.out
+	./randomtestcard1 >> randomtestresults.out
+	gcc -o randomtestcard2 randomtestcard2.c myAssert.c -g dominion.o rngs.o $(CFLAGS)
+	@echo randomtestcard >> randomtestresults.out
+	./randomtestcard2 >> randomtestresults.out
+	gcov -f -b dominion.c >> randomtestresults.out
+	cat dominion.c.gcov >> randomtestresults.out
 
 all: playdom player 
 
